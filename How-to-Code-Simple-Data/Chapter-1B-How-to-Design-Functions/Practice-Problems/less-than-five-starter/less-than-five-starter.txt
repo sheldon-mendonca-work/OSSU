@@ -1,0 +1,26 @@
+
+;; less-than-five-starter.rkt
+
+; 
+; PROBLEM:
+; 
+; DESIGN function that consumes a string and determines whether its length is
+; less than 5.  Follow the HtDF recipe and leave behind commented out versions 
+; of the stub and template.
+; 
+
+
+;; String -> Boolean
+;; Check if length of a string is less than 5 characters
+
+(check-expect (lessThan5? "string") false)
+(check-expect (lessThan5? "true") true)
+(check-expect (lessThan5? "palms") false)
+
+;(define (lessThan5? str) false) ;stub
+
+#;(define (lessThan5? str)
+  (...str)) ;template
+
+(define (lessThan5? str)
+  (< (string-length str) 5))

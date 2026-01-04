@@ -1,0 +1,28 @@
+(require 2htdp/image)
+;; tall-starter.rkt
+
+; 
+; PROBLEM:
+; 
+; DESIGN a function that consumes an image and determines whether the 
+; image is tall.
+; 
+; Remember, when we say DESIGN, we mean follow the recipe.
+; 
+; Leave behind commented out versions of the stub and template.
+; 
+
+
+;; Image -> Boolean
+;; produces true if the image is tall
+
+(check-expect (tall? (rectangle 2 3 "solid" "red")) true)
+(check-expect (tall? (rectangle 4 3 "solid" "red")) false)
+(check-expect (tall? (rectangle 3 3 "solid" "red")) false)
+
+; (define (tall? img) false) ;stub
+; (define (tall? img)
+;    (...img)) ;template
+
+(define (tall? img)
+  (> (image-height img) (image-width img)))
