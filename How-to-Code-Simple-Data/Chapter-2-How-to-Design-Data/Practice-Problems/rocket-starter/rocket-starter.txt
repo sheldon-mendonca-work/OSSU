@@ -1,0 +1,73 @@
+
+;; rocket-starter.rkt
+
+;; =================
+;; Data definitions:
+
+; 
+; PROBLEM A:
+; 
+; You are designing a program to track a rocket's journey as it descends 
+; 100 kilometers to Earth. You are only interested in the descent from 
+; 100 kilometers to touchdown. Once the rocket has landed it is done.
+; 
+; Design a data definition to represent the rocket's remaining descent. 
+; Call it RocketDescent.
+; 
+
+
+;; RocketDescent is one of:
+;;  - Natural(0, 100]
+;;  - false
+;; interp. If the rocket has descended, it is false else it is the distance of the rocket from Earth
+
+(define RD0 false)
+(define RD1 100)
+(define RD2 60)
+(define RD3 0.5)
+
+#;
+(define (fn-for-rocket-descent rd)
+  (cond [and (number? rd)
+             (> rd 0)
+             (<= rd 100)
+             (... rd)]
+        [else (...)]
+        ))
+;; Template rules used:
+;;  - one of: 2 cases
+;;  - atomic distinct: false
+;;  - atomic non-distinct: Number(0, 100]
+
+;; =================
+;; Functions:
+
+; 
+; PROBLEM B:
+; 
+; Design a function that will output the rocket's remaining descent distance 
+; in a short string that can be broadcast on Twitter. 
+; When the descent is over, the message should be "The rocket has landed!".
+; Call your function rocket-descent-to-msg.
+; 
+
+
+
+;; RocketDescent -> String
+;; outputs a message based on the status of Rocket Descent
+
+(check-expect (rocket-descent-to-message RD0) "The rocket has landed!")
+(check-expect (rocket-descent-to-message RD1) "The rocket is 100kms from touchdown!")
+(check-expect (rocket-descent-to-message RD2) "The rocket is 60kms from touchdown!")
+(check-expect (rocket-descent-to-message RD3) "The rocket is 1/2kms from touchdown!")
+
+;(define (rocket-descent-to-message rd) "") ;stub
+
+
+(define (rocket-descent-to-message rd)
+  (cond [(and (number? rd)
+             (> rd 0)
+             (<= rd 100))
+             (string-append "The rocket is " (number->string rd) "kms from touchdown!")]
+        [else "The rocket has landed!"]
+        ))
