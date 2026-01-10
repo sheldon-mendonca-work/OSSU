@@ -1,0 +1,100 @@
+(require 2htdp/image)
+(require 2htdp/universe)
+
+;; countdown-animation starter.rkt
+
+; 
+; PROBLEM:
+; 
+; Design an animation of a simple countdown. 
+; 
+; Your program should display a simple countdown, that starts at ten, and
+; decreases by one each clock tick until it reaches zero, and stays there.
+; 
+; To make your countdown progress at a reasonable speed, you can use the 
+; rate option to on-tick. If you say, for example, 
+; (on-tick advance-countdown 1) then big-bang will wait 1 second between 
+; calls to advance-countdown.
+; 
+; Remember to follow the HtDW recipe! Be sure to do a proper domain 
+; analysis before starting to work on the code file.
+; 
+; Once you are finished the simple version of the program, you can improve
+; it by reseting the countdown to ten when you press the spacebar.
+; 
+
+
+;; =================
+;; Constants:
+(define START 10)
+(define WIDTH 100)
+(define HEIGHT 100)
+(define MTS (empty-scene WIDTH HEIGHT))
+(define CTR-X (/ WIDTH 2))
+(define CTR-Y (/ HEIGHT 2))
+
+(define TEXT-SIZE 16)
+(define TEXT-COLOR "black")
+
+;; =================
+;; Data definitions:
+;; Countdown is Integer[0, START]
+;; interp. the number of seconds during the countdown
+(define C1 START)  ; start
+(define C2 5)   ; middle
+(define C3 0)   ; end
+ 
+#;
+(define (fn-for-countdown cd)
+  (... cd))
+
+;; Template rules used:
+;;  - atomic non-distinct: Integer[0, START]
+
+
+;; =================
+;; Functions:
+
+;; CountDown -> CountDown
+;; call to run animation to start countdown with (main 10)
+;; once the animation is done, reset the countdown to START
+(define (main cd)
+  (big-bang cd                   ; CountDown
+            (on-tick   advance-countdown 1)     ; CountDown -> CountDown
+            (to-draw   render-coundown)   ; CountDown -> Image
+            (on-key    reset-countdown)))    ; CountDown KeyEvent -> CountDown
+
+;; CountDown -> CountDown
+;; produce the next CountDown by reducing countdown by 1 until 0
+(check-expect (advance-countdown C1) (- START 1))
+(check-expect (advance-countdown C2) (- C2 1))
+(check-expect (advance-countdown 0) 0)
+
+;(define (advance-countdown cd) 0) ;stub
+
+(define (advance-countdown cd)
+  (if (= cd 0)
+      0
+      (- cd 1)))
+
+;; CountDown -> Image
+;; renders the image in MTS as per current value
+(check-expect (render-coundown 4) (place-image (text "4" TEXT-SIZE TEXT-COLOR) CTR-X CTR-Y MTS))
+(check-expect (render-coundown 10) (place-image (text "10" TEXT-SIZE TEXT-COLOR) CTR-X CTR-Y MTS))
+
+; (define (render-coundown cd) MTS) ;stub
+(define (render-coundown cd)
+  (place-image (text (number->string cd) TEXT-SIZE TEXT-COLOR) CTR-X CTR-Y MTS))
+
+;; CountDown KeyEvent -> CountDown
+;; reset the current value to start value on hitting the space key
+(check-expect (reset-countdown 10 " ") START)
+(check-expect (reset-countdown 0 " ") START)
+(check-expect (reset-countdown 10 "1") 10)
+(check-expect (reset-countdown 0 "1") 0)
+
+; (define (render-coundown cd ke) 0) ;stub
+(define (reset-countdown cd ke)
+  (cond [(key=? ke " ") START]
+        [else 
+         cd]))

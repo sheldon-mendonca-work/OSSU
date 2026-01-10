@@ -1,0 +1,117 @@
+(require 2htdp/image)
+(require 2htdp/universe)
+
+;; traffic-light-starter.rkt
+
+; 
+; PROBLEM:
+; 
+; Design an animation of a traffic light. 
+; 
+; Your program should show a traffic light that is red, then green, 
+; then yellow, then red etc. For this program, your changing world 
+; state data definition should be an enumeration.
+; 
+; Here is what your program might look like if the initial world 
+; state was the red traffic light:
+; .
+; Next:
+; .
+; Next:
+; .
+; Next is red, and so on.
+; 
+; To make your lights change at a reasonable speed, you can use the 
+; rate option to on-tick. If you say, for example, (on-tick next-color 1) 
+; then big-bang will wait 1 second between calls to next-color.
+; 
+; Remember to follow the HtDW recipe! Be sure to do a proper domain 
+; analysis before starting to work on the code file.
+; 
+; Note: If you want to design a slightly simpler version of the program,
+; you can modify it to display a single circle that changes color, rather
+; than three stacked circles. 
+; 
+
+
+
+;; Animation of a traffic light that changes signal every second
+
+;; =================
+;; Constants:
+
+(define WIDTH 500)
+(define HEIGHT 500)
+
+(define CTR-X (/ WIDTH 2))
+(define CTR-Y (/ HEIGHT 2))
+
+(define MTS (empty-scene WIDTH HEIGHT))
+
+(define RED-LIGHT .)
+(define GREEN-LIGHT .)
+(define YELLOW-LIGHT .)
+
+;; =================
+;; Data definitions:
+
+;; TrafficLight is one of:
+;;  - "red"
+;;  - "yellow"
+;;  - "green"
+;; interp. the color of a traffic light
+
+(define TS1 "red")
+(define TS2 "yellow")
+(define TS3 "green")
+
+
+#;(define (fn-for-traffic-light tl)
+  (cond [(string=? "red" tl) (...)]
+        [(string=? "yellow" tl) (...)]
+        [(string=? "green" tl) (...)]))
+;; Template rules used:
+;;  - one of: 3 cases
+;;  - atomic distinct: "red"
+;;  - atomic distinct: "yellow"
+;;  - atomic distinct: "green"
+
+
+;; =================
+;; Functions:
+
+;; TrafficLight -> TrafficLight
+;; called to run the animation; start with (main "red")
+;; 
+(define (main tl)
+  (big-bang tl                   ; TrafficLight
+            (on-tick   next-traffic-light 1)     ; TrafficLight -> TrafficLight
+            (to-draw   render-traffic-light)   ; TrafficLight -> Image
+            ))  
+
+;; TrafficLight -> TrafficLight
+;; produce the next Traffic Light Signal
+;(define (next-traffic-light tl) "red") ;stub
+
+(check-expect (next-traffic-light TS1) "yellow")
+(check-expect (next-traffic-light TS2) "green")
+(check-expect (next-traffic-light TS3) "red")
+
+(define (next-traffic-light tl)
+  (cond [(string=? "red" tl) "yellow"]
+        [(string=? "yellow" tl) "green"]
+        [(string=? "green" tl) "red"]))
+
+
+;; TrafficLight -> Image
+;; render the traffic light image based on current TrafficLight
+
+(check-expect  (render-traffic-light TS1) (place-image RED-LIGHT CTR-X CTR-Y MTS))
+(check-expect  (render-traffic-light TS2) (place-image YELLOW-LIGHT CTR-X CTR-Y MTS))
+(check-expect  (render-traffic-light TS3) (place-image GREEN-LIGHT CTR-X CTR-Y MTS))
+
+;(define (render-traffic-light tl) MTS) ;stub
+(define (render-traffic-light tl)
+  (cond [(string=? "red" tl) (place-image RED-LIGHT CTR-X CTR-Y MTS)]
+        [(string=? "yellow" tl) (place-image YELLOW-LIGHT CTR-X CTR-Y MTS)]
+        [(string=? "green" tl) (place-image GREEN-LIGHT CTR-X CTR-Y MTS)]))
