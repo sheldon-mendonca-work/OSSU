@@ -1,0 +1,56 @@
+(require 2htdp/image)
+
+;; image-list-starter.rkt
+
+;; =================
+;; Data definitions:
+
+; 
+; PROBLEM A:
+; 
+; Design a data definition to represent a list of images. Call it ListOfImage. 
+; 
+
+
+;; ListOfImage is one of:
+;; - empty
+;; - (cons Image ListOfImage)
+
+(define LOI1 empty)
+(define LOI2 (cons (circle 20 "solid" "red") empty))
+(define LOI3 (cons (circle 40 "solid" "blue") (cons (circle 20 "solid" "red") empty)))
+
+
+#;
+(define (fn-for-loi loi)
+  (cond [(empty? loi) (...)]
+        [else
+         (... (first loi)
+              (fn-for-loi (rest loi)))]))
+
+;; =================
+;; Functions:
+
+; 
+; PROBLEM B:
+; 
+; Design a function that consumes a list of images and produces a number 
+; that is the sum of the areas of each image. For area, just use the image's 
+; width times its height.
+; 
+
+
+;; ListOfImage -> Number
+;; interp. Returns the total area of all the images in the list
+
+(check-expect (calc-area LOI1) 0)
+(check-expect (calc-area LOI2) 1600)
+(check-expect (calc-area LOI3) 8000)
+
+
+;;(define (calc-area loi) (...)) ;stub
+
+(define (calc-area loi)
+  (cond [(empty? loi) 0]
+        [else (+ (* (image-width (first loi))
+               (image-height (first loi))) (calc-area (rest loi)))]))
